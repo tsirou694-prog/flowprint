@@ -1,0 +1,34 @@
+FlowPrint Node 6 — macOS Codex CLI activation evidence
+Captured from user-controlled CLI: 2026-07-19
+
+Environment:
+  macOS (Intel)
+  Codex CLI 0.144.6
+  Python 3.14.3
+  ChatGPT login active
+
+Installed plugin:
+  flowprint@flowprint-dev
+  installed, enabled
+  0.1.0+codex.20260717090647
+
+Prompt:
+  $flowprint 检查 FlowPrint 是否已在当前 Mac Codex CLI 会话中激活。只返回 FlowPrint activation card；不要生成、编译或安装任何 Skill。
+
+Response:
+  FlowPrint skill entry loaded successfully. Codex read the plugin activation
+  definition before returning the card.
+
+  FlowPrint Activation
+  Status   ACTIVE
+  Version  0.1.0+codex.20260717090647
+  Runtime  macOS · Codex CLI
+  Skill    flowprint
+  Action   Activation check only
+  Changes  None
+
+Evidence boundary:
+  This proves one explicit FlowPrint trigger in a writable, logged-in macOS
+  Codex CLI environment. It also proves that this activation-only request made
+  no project changes. It does not yet prove valid compilation, rejection gates,
+  automatic triggering, generated-Skill installation, or field reuse on macOS.

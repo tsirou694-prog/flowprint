@@ -1,0 +1,31 @@
+FlowPrint Node 6 — macOS old-schema rejection evidence
+Captured from user-controlled CLI: 2026-07-19
+
+Input:
+  tests/fixtures/classification/sticker-valid.json
+
+Requested output:
+  .flowprint/drafts/mac-should-not-exist
+
+Result:
+  classification_validator_exit: 0
+  compiler_exit: 1
+  rejection_gate: confirmation_schema
+  rejection_reason: Node 5 requires schema_version 0.3 and explicit user
+    confirmation records; the original input uses schema 0.2.
+  target_directory_exists: false
+  SKILL.md: not generated
+  flowprint-manifest.json: not generated
+  compile-record.json: not generated
+  input_modified: false
+
+Input SHA-256 before and after:
+  6777dc9569467aa9313d4f0971029caf092daac10b06bddf8cd3b805f97a4674
+
+No installation, submission, upload, or publication was performed.
+
+Evidence boundary:
+  The standalone classification validator accepted this structurally valid old
+  classification, then the real compiler's confirmation_schema gate rejected it
+  with no output residue or input mutation. This proves fail-closed behavior for
+  this tested schema 0.2 sample, not every malformed or adversarial input.

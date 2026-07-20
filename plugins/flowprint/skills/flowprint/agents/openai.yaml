@@ -1,0 +1,7 @@
+interface:
+  display_name: "FlowPrint"
+  short_description: "Select one workflow and compile a guarded Skill draft"
+  default_prompt: "Use $flowprint alone to validate the evidence root, separate adjacent reusable workflows, stop for my selection when needed, classify only the selected workflow from sources actually read, and compile a non-installed Skill draft."
+
+policy:
+  allow_implicit_invocation: true

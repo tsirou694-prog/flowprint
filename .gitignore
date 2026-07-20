@@ -1,0 +1,23 @@
+# Python caches
+__pycache__/
+*.py[cod]
+
+# Local FlowPrint state and generated drafts
+.flowprint/
+
+# Local environments and credentials
+.env
+.env.*
+.venv/
+venv/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local archives and transient output
+*.zip
+*.tmp
+*.log

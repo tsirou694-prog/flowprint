@@ -1,0 +1,51 @@
+FlowPrint Node 6 — Windows final implicit-trigger evidence freshness result
+Date: 2026-07-20
+Environment: user-controlled, writable, logged-in Windows Codex CLI
+Runtime plugin version: 0.1.0+codex.20260719135630
+
+Overall result: PARTIAL PASS — routing and evidence-scope isolation passed; evidence freshness/version binding failed.
+
+Passed observations
+
+- FlowPrint was selected without loading skill-creator, superpowers, or another unrelated Skill.
+- Classification evidence was limited to the current visible conversation and current workspace descendants.
+- FlowPrint's own bundle was used only for its rules and scripts.
+- The run reported no Memory, session log, shell history, global Codex configuration, authentication data, environment-variable content, home-wide scan, other repository, or other plugin read.
+- No file, classification state, draft, plugin state, Git state, or external channel was changed.
+- The current-session prohibition on compiling/installing/publishing was not itself persisted as a durable permission rule. The preview instead proposed product-level authorization boundaries already supported by workspace contracts.
+
+Failed observation
+
+- The requested workflow concerned the just-completed final Windows run, but the preview grounded most concrete claims in older Node 5 files:
+  - tests/evidence/windows-cli-node5-valid-compile.txt
+  - tests/evidence/windows-cli-node5-rejection.txt
+  - tests/evidence/windows-cli-node5-regressions-final.txt
+  - tests/evidence/windows-cli-activation-card.txt
+- Run Parameter RP-1 explicitly recorded the older revision 0.1.0+codex.20260717090647 rather than the active final revision 0.1.0+codex.20260719135630.
+- The current Windows workspace archive did not contain the newly captured final-version Node 6 evidence files, so the agent selected locally available stale evidence instead of conservatively stating that final-version artifacts were unavailable.
+
+Interpretation
+
+- This run supports the frontmatter routing and evidence-scope claims on one Windows session.
+- It does not close the Windows final-version implicit-trigger evidence chain because the preview did not bind its conclusions to fresh, same-version evidence.
+- The correct behavior when fresh evidence is unavailable is to use only the current visible results, mark missing artifact locators as unavailable, and avoid importing older-version paths or parameters into the candidate workflow.
+
+Required retest
+
+1. Copy or create the final-version Windows evidence files inside the tested workspace:
+   - windows-cli-node6-final-install.txt
+   - windows-cli-node6-final-activation.txt
+   - windows-cli-node6-final-valid-compile.txt
+   - windows-cli-node6-final-rejection.txt
+2. Start a fresh Codex CLI session.
+3. Request the same implicit classification without naming FlowPrint.
+4. Require the Evidence scope audit to identify the final Node 6 files and version 0.1.0+codex.20260719135630.
+5. Fail the retest if any older Node 5 version, path, result, or unsupported concrete value is promoted as evidence for the final run.
+
+Claims not established by this run
+
+- Statistical trigger accuracy
+- Universal Windows compatibility
+- Deterministic enforcement of evidence scope
+- Field-tested usefulness of a generated Skill
+- ChatGPT GUI or ordinary web distribution

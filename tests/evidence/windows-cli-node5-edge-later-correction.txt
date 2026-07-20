@@ -1,0 +1,23 @@
+FlowPrint Node 5 language edge-case evidence
+Case: later correction overrides early request
+Date: 2026-07-17
+Environment: user's authenticated Windows Codex CLI
+Plugin version: 0.1.0+codex.20260717083300
+
+Input sequence:
+1. Early requirement: give Laosan a clearly visible long tail.
+2. Final correction: invalidate the long-tail requirement; Laosan has no tail or a short tail.
+
+Observed classification:
+- Core: process information chronologically; an explicit final correction supersedes the conflicting early requirement.
+- Profile: Laosan has no tail or a short tail; the superseded long-tail setting must not remain active.
+- Run Parameters: none; the invalidated long-tail value was not retained.
+- Failure Lesson: maintain a chronological set of active requirements and prevent invalidated instructions from influencing output.
+- Permission Boundaries: none.
+- Evidence inventory: goal yes, result no, corrections yes, artifacts no.
+- Status: needs_review because the named-character Profile item is high impact.
+- One review question asks whether to retain the final trait only in Laosan's Profile.
+
+Assessment:
+- This tested prompt behaved as expected for chronological override.
+- The result is one forward sample and does not establish general performance on all corrections, negations, or long contexts.

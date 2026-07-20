@@ -1,0 +1,47 @@
+FlowPrint Node 6 — Windows final implicit-trigger retest 2
+Date: 2026-07-20
+Runtime plugin version: 0.1.0+codex.20260719135630
+
+Overall result: PARTIAL PASS — final-version evidence binding passed; workspace-root minimization and audit consistency failed.
+
+Passed
+
+- FlowPrint was selected without explicit `$flowprint` invocation.
+- Only the FlowPrint Skill was reported as loaded.
+- The four final Windows Node 6 evidence records were read from the evidence patch archive.
+- Concrete final-run claims were bound to 2026-07-20 and version 0.1.0+codex.20260719135630.
+- Older Node 5 evidence was not used to fill the final install, activation, valid compile, or rejection results.
+- No classification file, draft, plugin state, Git state, or external channel was changed.
+
+Failed or inconsistent
+
+1. The Codex session started from C:\Users\demo-user\Downloads, so the allowed "current workspace" became the entire Downloads tree.
+2. `rg --files` enumerated unrelated descendants, including MoneyPrinterTurbo-Portable-Windows-1.3.0 content and unrelated archives. File contents were not shown as read, but filename enumeration still exceeded the minimum evidence scope needed for this task.
+3. The final Evidence scope audit normalized the broad root as allowed instead of flagging it as unsafe and asking the user to reopen Codex from the FlowPrint project root.
+4. DK-1 cited a "FlowPrint compiler contract", but the tool trace and audit list show only SKILL.md, decontextualization.md, and classification-contract.md were read. The cited source was therefore not accurately represented in the audit.
+5. DK-3 claimed FlowPrint rules said the WindowsApps `python3` alias may be unavailable. That fact is not contained in the four final Node 6 evidence files or the three FlowPrint rule files listed in the audit. It appears to be residual older-workspace knowledge, despite the statement that old Node 5 material was used only as a failure lesson.
+
+Interpretation
+
+- Evidence freshness/version binding is now demonstrated on one Windows implicit-trigger run.
+- Evidence-scope safety is not yet closed because the policy treats any current working directory as a safe workspace root.
+- The product needs a workspace-root safety rule: if the current root is a home directory or a broad personal folder such as Downloads, Desktop, or Documents, stop before recursive discovery and ask the user to open the actual project directory.
+- Evidence audit must list every cited rule source actually read; a source not read cannot be named as evidence.
+
+Required retest
+
+1. Start PowerShell in the exact FlowPrint project root.
+2. Confirm `Get-Location` ends in `FlowPrint-Windows-Final-v0.1.0\flowprint`.
+3. Put the final Node 6 evidence files under that project's `tests\evidence` directory.
+4. Start a fresh Codex session from that directory.
+5. Run the same implicit preview request.
+6. Fail if recursive discovery touches a parent directory, an unrelated sibling, or any source not disclosed in the audit.
+7. Fail if a concrete claim is sourced from an unread file or from an older Node 5 record.
+
+Claims not established
+
+- Deterministic evidence-scope enforcement
+- Safe behavior when the session starts from an overly broad working directory
+- Statistical routing accuracy
+- General Windows compatibility
+- Field-tested usefulness

@@ -1,0 +1,17 @@
+FlowPrint Node 3 — Windows Codex CLI activation evidence
+Captured from user-controlled CLI: 2026-07-17
+
+Prompt:
+  $flowprint 把我们刚完成的插件安装任务准备成可复用 Skill。只返回 FlowPrint activation card。
+
+Response:
+  FlowPrint is active.
+  Candidate workflow: 插件安装与验证
+  Evidence: goal yes · result yes · corrections yes · artifacts yes
+  Status: scaffold_ready
+  Next capability: decontextualization classifier (Node 4)
+
+Evidence boundary:
+  This proves one explicit positive trigger in a writable, logged-in Windows
+  Codex CLI environment. It does not prove implicit, negative, or ambiguous
+  trigger behavior, and it does not guarantee every managed host is writable.

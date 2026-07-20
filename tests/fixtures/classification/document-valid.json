@@ -1,0 +1,109 @@
+{
+  "schema_version": "0.2",
+  "workflow": {
+    "candidate_name": "Structured report revision"
+  },
+  "source": {
+    "type": "current_task",
+    "raw_transcript_stored": false
+  },
+  "evidence_inventory": {
+    "goal": true,
+    "result": true,
+    "corrections": true,
+    "artifacts": true
+  },
+  "items": [
+    {
+      "id": "item-core-preserve-template",
+      "statement": "Preserve the target document's existing table and section structure while replacing content.",
+      "layer": "core",
+      "evidence": [
+        {
+          "source_type": "user_correction",
+          "locator": "conversation: document-format correction",
+          "quote": "要保留我申报书V3的原表格式"
+        }
+      ],
+      "rule_hits": ["R4", "R5"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "Preserving the designated target template generalizes across structured document revisions."
+    },
+    {
+      "id": "item-domain-docx",
+      "statement": "Use DOCX-aware editing and rendering checks when the target is a Word document.",
+      "layer": "domain",
+      "evidence": [
+        {
+          "source_type": "final_artifact",
+          "locator": "workspace: target .docx artifact",
+          "quote": "2026 数据要素大赛项目申报书V3"
+        }
+      ],
+      "rule_hits": ["R2"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "DOCX preservation and rendering are format-caused constraints."
+    },
+    {
+      "id": "item-profile-writing-style",
+      "statement": "Use plain, concise, action-led headings for this user's formal reports.",
+      "layer": "profile",
+      "evidence": [
+        {
+          "source_type": "user_correction",
+          "locator": "conversation: repeated writing preference",
+          "quote": "朴实无华、避免花哨；动宾句式、逻辑清晰"
+        }
+      ],
+      "rule_hits": ["R1", "R7"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "This is a stable user writing preference, not a universal report rule."
+    },
+    {
+      "id": "item-param-source-version",
+      "statement": "Use the current source draft and target revision file selected for this run.",
+      "layer": "run_parameter",
+      "evidence": [
+        {
+          "source_type": "user_instruction",
+          "locator": "conversation: source and target file selection",
+          "quote": "根据（6）里的信息来进行填充"
+        }
+      ],
+      "rule_hits": ["R3"],
+      "evidence_state": "supported",
+      "impact": "low",
+      "review_required": false,
+      "rationale": "Source and target filenames change on the next revision task."
+    },
+    {
+      "id": "item-failure-copy-format",
+      "statement": "Copying the source document wholesale can destroy the approved target template.",
+      "layer": "failure_lesson",
+      "evidence": [
+        {
+          "source_type": "user_correction",
+          "locator": "conversation: rejected first attempt",
+          "quote": "不是把（6）的全表复制粘贴过来"
+        }
+      ],
+      "rule_hits": ["R5"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "The rejected approach yields a reusable preservation check.",
+      "abstracted_rule": "Map source content into the target template field by field and render-check the result."
+    }
+  ],
+  "gates": {
+    "decision": "ready",
+    "review_item_ids": [],
+    "questions": []
+  }
+}

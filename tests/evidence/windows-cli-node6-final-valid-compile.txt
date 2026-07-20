@@ -1,0 +1,41 @@
+FlowPrint Node 6 — final Windows valid compile evidence
+Captured from user-controlled Codex CLI: 2026-07-20
+
+Version:
+  0.1.0+codex.20260719135630
+
+Input:
+  tests/fixtures/classification/sticker-ready-v0.3.json
+
+Requested output:
+  .flowprint/drafts/windows-final-laosan-sticker-workflow
+
+Runtime selected by bundled PowerShell launcher:
+  C:\Users\<USER>\AppData\Local\Programs\Python\Python313\python.exe
+  Python 3.13.7
+
+Result:
+  classification_validator_exit: 0
+  compiler_exit: 0
+  SKILL.md: exists
+  flowprint-manifest.json: exists
+  compile-record.json: exists
+  install_state: not_authorized
+  install_performed: false
+  external_action_performed: false
+
+The pre-run check confirmed the requested target did not already exist. The
+post-run check used Resolve-Path and read the manifest and compile record. No
+installation, submission, upload, or publication was performed.
+
+Display note:
+  The final prose summary omitted a path separator between `flowprint` and
+  `.flowprint`, while the earlier Resolve-Path JSON showed the correct path.
+  Artifact existence and state conclusions use the Resolve-Path result rather
+  than the prose formatting.
+
+Evidence boundary:
+  This proves one valid schema 0.3 input compiled on the final Windows plugin
+  build with the bundled interpreter-discovery path, and remained an uninstalled
+  draft. It does not prove every valid input compiles or that the generated Skill
+  is useful in field reuse.

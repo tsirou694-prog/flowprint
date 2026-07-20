@@ -1,0 +1,31 @@
+FlowPrint Node 5 rejection evidence
+Date: 2026-07-17
+Environment: user's authenticated Windows Codex CLI
+Plugin version: 0.1.0+codex.20260717083300
+
+Input:
+- tests/fixtures/classification/sticker-valid.json
+- schema_version: 0.2
+- No schema 0.3 user confirmation records
+
+Invocation constraints:
+- Do not modify, repair, or upgrade the input.
+- Do not add confirmations.
+- Do not bypass the compiler validator.
+- Target: .flowprint/drafts/should-not-exist
+
+Observed result:
+- Compiler exit code: 1
+- Rejection gate: confirmation_schema
+- Reason: Node 5 requires schema_version 0.3 with explicit confirmation records.
+- TargetExists: false
+- RelatedCount: 0
+- No draft, manifest, or installable output was generated.
+- The input was not modified and no confirmation was fabricated.
+
+Environment note:
+- The WindowsApps python3 launcher remained unavailable.
+- The previously discovered Python 3.13 interpreter was used directly.
+
+Assessment:
+- The real compiler entry point failed closed for this tested unconfirmed/old-schema input.

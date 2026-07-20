@@ -1,0 +1,41 @@
+FlowPrint Node 3 runtime error excerpts
+Captured: 2026-07-17
+Secrets and session identifiers omitted.
+
+CASE 1 — Register repo Marketplace in current logged-in Codex
+Command:
+  codex plugin marketplace add /workspace/scratch/43694460ebb6/flowprint
+Result: non-zero exit
+stderr excerpt:
+  Error: failed to create marketplace install directory /root/.codex/.tmp/marketplaces:
+  Read-only file system (os error 30)
+
+CASE 2 — Start an ephemeral authenticated session with a temporary repo Skill
+Command:
+  codex exec --ephemeral --skip-git-repo-check --sandbox read-only \
+    -C /workspace/scratch/43694460ebb6/flowprint \
+    '$flowprint ...'
+Result: model call did not start
+stderr excerpt:
+  failed to open state db at /root/.codex/state_5.sqlite:
+  error returned from database: (code: 8) attempt to write a readonly database
+  Error: failed to initialize in-process app-server client:
+  Read-only file system (os error 30)
+
+CASE 3 — Start a session from an isolated writable CODEX_HOME
+Environment:
+  Marketplace registration, plugin installation and cache validation succeeded.
+Result: model request was not authenticated
+stderr excerpt:
+  failed to connect to websocket: HTTP error: 401 Unauthorized
+
+MOUNT EVIDENCE
+Command:
+  findmnt -T /root/.codex -o TARGET,SOURCE,FSTYPE,OPTIONS -n
+Result:
+  /root/.codex tmpfs tmpfs ro,nosuid,nodev,noexec,relatime,...
+
+Interpretation boundary:
+  These logs show where the current runtime stopped. They do not prove that
+  FlowPrint will trigger correctly in another host, and they do not establish
+  that all Codex environments mount CODEX_HOME read-only.

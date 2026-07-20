@@ -1,0 +1,37 @@
+FlowPrint Node 5 final Windows regression evidence
+Date: 2026-07-17
+Environment: user's authenticated Windows Codex CLI / PowerShell
+Plugin version: 0.1.0+codex.20260717090647
+
+Regression 1 — PowerShell interpreter discovery
+- Command: run_flowprint.ps1 validate sticker-ready-v0.3.json
+- Result: PASS, 7 items, 3 auditable review items.
+- The launcher successfully found a working local interpreter despite the unusable WindowsApps python3 alias.
+- No software installation occurred.
+
+Regression 2 — current-session scope exclusion
+- Input contained two unresolved color candidates and said this run was preview-only with no generation/compilation.
+- Evidence: goal no, result no, corrections no, artifacts no.
+- Color remained an ambiguous Run Parameter.
+- Status: needs_review; only one question asked for the final color.
+- Permission Boundaries: none.
+- The preview-only/no-compile instruction was obeyed but not persisted or re-confirmed.
+
+Regression 3a — incomplete task guard
+- Input contained only three design constraints and explicitly no result, validation, or artifact.
+- Evidence: goal yes, result no, corrections no, artifacts no.
+- Status: needs_completed_task.
+- FlowPrint did not pretend that a completed reusable workflow was visible.
+
+Regression 3b — modality strength with explicit achieved result
+- Input included an accepted achieved-result description but no readable artifact.
+- Evidence: goal yes, result yes, corrections no, artifacts no.
+- "Usually rounded" remained an ambiguous, review-required brand Profile tendency rather than a mandatory rule.
+- "Prefer warm colors for this run" remained a low-impact Run Parameter.
+- "Logo safe area must be preserved" remained mandatory Domain Knowledge.
+- Status: needs_review because the unnamed brand/Profile scope required confirmation.
+
+Assessment:
+- The three targeted regressions passed on this Windows environment.
+- These results do not establish statistical accuracy, all-Windows compatibility, or field-tested usefulness.
+- Negation/sarcasm and single-image Profile promotion remain untested forward cases.

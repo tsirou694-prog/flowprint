@@ -1,0 +1,177 @@
+{
+  "schema_version": "0.4",
+  "workflow": {
+    "candidate_name": "家庭旅行邀请函与纪念海报制作",
+    "scope": {
+      "status": "user_selected",
+      "candidates": [
+        {
+          "id": "trip-planning",
+          "name": "适老亲子家庭短途旅行规划",
+          "evidence": [
+            {
+              "source_type": "final_artifact",
+              "locator": "evidence cohort: accepted two-day itinerary"
+            }
+          ],
+          "rationale": "Produces an operational itinerary."
+        },
+        {
+          "id": "trip-poster",
+          "name": "家庭旅行邀请函与纪念海报制作",
+          "evidence": [
+            {
+              "source_type": "final_artifact",
+              "locator": "evidence cohort: accepted vertical invitation poster"
+            }
+          ],
+          "rationale": "Produces a visual family-group artifact with a distinct layout and visual QA contract."
+        }
+      ],
+      "selected_candidate_id": "trip-poster",
+      "selection_confirmation": {
+        "selected_candidate_id": "trip-poster",
+        "confirmed_by": "user",
+        "accepted": true,
+        "answer": "只生成家庭旅行邀请函与纪念海报制作 Skill，排除旅行规划。"
+      }
+    },
+    "trigger": {
+      "summary": "Create concise, mobile-readable family trip invitations and commemorative posters from an accepted itinerary.",
+      "when_to_use": [
+        "家庭旅行邀请函",
+        "亲子游纪念海报",
+        "家庭群旅行通知图"
+      ],
+      "do_not_use": [
+        "从零规划旅行路线、酒店或景点"
+      ]
+    }
+  },
+  "source": {
+    "type": "current_task",
+    "raw_transcript_stored": false
+  },
+  "evidence_inventory": {
+    "goal": true,
+    "result": true,
+    "corrections": true,
+    "artifacts": true
+  },
+  "items": [
+    {
+      "id": "item-core-poster-structure",
+      "workflow_candidate_id": "trip-poster",
+      "statement": "Turn an accepted itinerary into a concise vertical family invitation that emphasizes companionship, route story, and only the essential day markers.",
+      "layer": "core",
+      "evidence": [
+        {
+          "source_type": "user_correction",
+          "locator": "accepted poster correction: invitation rather than guide"
+        }
+      ],
+      "rule_hits": ["R4", "R7"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "The communication hierarchy generalizes without retaining Yueyang-specific copy."
+    },
+    {
+      "id": "item-domain-mobile-legibility",
+      "workflow_candidate_id": "trip-poster",
+      "statement": "Check text bounds, contrast, information density, and mobile-size readability before delivery.",
+      "layer": "domain",
+      "evidence": [
+        {
+          "source_type": "final_artifact",
+          "locator": "accepted vertical poster layout"
+        }
+      ],
+      "rule_hits": ["R2"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "These checks come from the mobile visual-delivery format."
+    },
+    {
+      "id": "item-param-poster-copy",
+      "workflow_candidate_id": "trip-poster",
+      "statement": "This run used the title 出发吧！岳阳见, two dated day labels, a vertical format, limited hand-drawn accents, and large solid-color information areas.",
+      "layer": "run_parameter",
+      "evidence": [
+        {
+          "source_type": "user_correction",
+          "locator": "final poster title, dates, and style correction"
+        }
+      ],
+      "rule_hits": ["R3", "R7"],
+      "evidence_state": "supported",
+      "impact": "low",
+      "review_required": false,
+      "rationale": "Title, dates, destination, and visual direction may change on the next invitation."
+    },
+    {
+      "id": "item-failure-long-guide",
+      "workflow_candidate_id": "trip-poster",
+      "statement": "Do not turn a family invitation into a dense travel-guide infographic.",
+      "layer": "failure_lesson",
+      "evidence": [
+        {
+          "source_type": "user_correction",
+          "locator": "final correction: do not make a tourism-guide long image"
+        }
+      ],
+      "rule_hits": ["R4", "R5"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "The prevention rule generalizes across family invitation designs.",
+      "abstracted_rule": "Match information density to the communication purpose rather than copying all source details."
+    },
+    {
+      "id": "item-permission-poster-send",
+      "workflow_candidate_id": "trip-poster",
+      "statement": "Preparing an invitation does not authorize sending it to a family group or publishing it; obtain fresh authorization before either action.",
+      "layer": "permission_boundary",
+      "evidence": [
+        {
+          "source_type": "model_inference",
+          "locator": "selected workflow: external distribution actions"
+        }
+      ],
+      "rule_hits": ["R8"],
+      "evidence_state": "supported",
+      "impact": "high",
+      "review_required": true,
+      "rationale": "Sending or publishing affects other people and requires current authorization."
+    }
+  ],
+  "gates": {
+    "decision": "ready",
+    "review_item_ids": [
+      "item-permission-poster-send"
+    ],
+    "questions": [
+      {
+        "id": "question-1",
+        "item_ids": [
+          "item-permission-poster-send"
+        ],
+        "prompt": "Keep sending and publishing as separately authorized actions?",
+        "recommended_answer": "Yes — preparing the invitation does not authorize distribution."
+      }
+    ],
+    "confirmations": [
+      {
+        "id": "confirmation-1",
+        "question_id": "question-1",
+        "item_ids": [
+          "item-permission-poster-send"
+        ],
+        "confirmed_by": "user",
+        "accepted": true,
+        "answer": "确认，发送或发布前需要单独授权。"
+      }
+    ]
+  }
+}

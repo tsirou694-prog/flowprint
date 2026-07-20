@@ -1,0 +1,14 @@
+FlowPrint Node 6 — final macOS distribution archive hash evidence
+Captured from user-controlled Mac terminal: 2026-07-19
+
+Command:
+  shasum -a 256 FlowPrint-Mac-routingfix-v0.1.0.zip
+
+Result:
+  fafdedd93484d9ae3e46021564786ca27f304c4c572f6f6d75fb0327a5ab590a  FlowPrint-Mac-routingfix-v0.1.0.zip
+
+Assessment:
+  The user-side SHA-256 exactly matches the release-side SHA-256 recorded for
+  the final routing-fix archive. This closes the file-integrity evidence gap for
+  this downloaded archive. It does not independently prove runtime behavior;
+  runtime behavior is covered by the separate final implicit-trigger evidence.

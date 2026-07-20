@@ -1,0 +1,32 @@
+FlowPrint Node 6 — macOS valid compile evidence
+Captured from user-controlled CLI: 2026-07-19
+
+Input:
+  tests/fixtures/classification/sticker-ready-v0.3.json
+
+Requested output:
+  .flowprint/drafts/mac-laosan-sticker-workflow
+
+Runtime:
+  Python 3.14.3
+  /Library/Frameworks/Python.framework/Versions/3.14/bin/python3
+
+Result:
+  classification_validator_exit: 0
+  compiler_exit: 0
+  SKILL.md: exists
+  flowprint-manifest.json: exists
+  compile-record.json: exists
+  install_state: not_authorized
+  install_performed: false
+  external_action_performed: false
+
+No installation, submission, upload, publication, or other external action was
+performed.
+
+Evidence boundary:
+  This proves one valid schema 0.3 classification compiled successfully on the
+  user's Intel Mac with Python 3.14.3, while the compiled result remained an
+  uninstalled draft. It does not prove that every valid classification compiles,
+  that every invalid input is rejected, or that the generated Skill is useful in
+  field reuse.

@@ -1,0 +1,142 @@
+{
+  "schema_version": "0.2",
+  "workflow": {
+    "candidate_name": "WeChat sticker production"
+  },
+  "source": {
+    "type": "current_task",
+    "raw_transcript_stored": false
+  },
+  "evidence_inventory": {
+    "goal": true,
+    "result": true,
+    "corrections": true,
+    "artifacts": true
+  },
+  "items": [
+    {
+      "id": "item-core-anatomy",
+      "statement": "Verify identity-defining anatomy against the active character profile.",
+      "layer": "core",
+      "evidence": [
+        {
+          "source_type": "user_correction",
+          "locator": "conversation: final character correction",
+          "quote": "注意老三无尾或短尾的特征"
+        }
+      ],
+      "rule_hits": ["R4", "R5"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "The anatomy check generalizes while the concrete character fact remains in Profile."
+    },
+    {
+      "id": "item-domain-export",
+      "statement": "Load the current WeChat sticker export requirements before validation.",
+      "layer": "domain",
+      "evidence": [
+        {
+          "source_type": "workspace_file",
+          "locator": "accepted sticker specification",
+          "quote": "按照表情包规则形成最终稿"
+        }
+      ],
+      "rule_hits": ["R2"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "The requirement is caused by the target platform, not by the character."
+    },
+    {
+      "id": "item-profile-tail",
+      "statement": "Laosan has no visible tail or only a very short tail.",
+      "layer": "profile",
+      "evidence": [
+        {
+          "source_type": "user_correction",
+          "locator": "conversation: character identity correction",
+          "quote": "注意老三无尾或短尾的特征"
+        }
+      ],
+      "rule_hits": ["R1", "R7"],
+      "evidence_state": "supported",
+      "impact": "high",
+      "review_required": true,
+      "rationale": "This is a stable identity fact for one named character and must not enter Core."
+    },
+    {
+      "id": "item-param-count",
+      "statement": "Produce eight stickers in this run.",
+      "layer": "run_parameter",
+      "evidence": [
+        {
+          "source_type": "user_instruction",
+          "locator": "conversation: second-set request",
+          "quote": "现在我们来做第二套（8个）"
+        }
+      ],
+      "rule_hits": ["R3", "R7"],
+      "evidence_state": "supported",
+      "impact": "low",
+      "review_required": false,
+      "rationale": "Sticker count can change without changing the production workflow."
+    },
+    {
+      "id": "item-failure-halo",
+      "statement": "Transparent exports can develop a visible white edge halo.",
+      "layer": "failure_lesson",
+      "evidence": [
+        {
+          "source_type": "user_correction",
+          "locator": "conversation: edge-quality feedback",
+          "quote": "表情包均有外围线"
+        }
+      ],
+      "rule_hits": ["R5"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "The concrete defect becomes a reusable transparent-edge validation lesson.",
+      "abstracted_rule": "Preview transparent exports on light and dark backgrounds before packaging."
+    },
+    {
+      "id": "item-permission-submit",
+      "statement": "Preparing submission assets does not authorize publishing or submitting them.",
+      "layer": "permission_boundary",
+      "evidence": [
+        {
+          "source_type": "user_instruction",
+          "locator": "conversation: submission-material request",
+          "quote": "请开始设计投稿表情包需要的其他边角物料"
+        }
+      ],
+      "rule_hits": ["R8"],
+      "evidence_state": "ambiguous",
+      "impact": "high",
+      "review_required": true,
+      "rationale": "Creating assets is visible evidence, but authorization to submit is not."
+    }
+  ],
+  "gates": {
+    "decision": "needs_review",
+    "review_item_ids": [
+      "item-profile-tail",
+      "item-permission-submit"
+    ],
+    "questions": [
+      {
+        "id": "question-1",
+        "item_ids": ["item-profile-tail"],
+        "prompt": "Keep the tail rule only in the Laosan Profile?",
+        "recommended_answer": "Yes — keep the concrete tail fact out of Core."
+      },
+      {
+        "id": "question-2",
+        "item_ids": ["item-permission-submit"],
+        "prompt": "Should the reusable workflow stop before actual submission?",
+        "recommended_answer": "Yes — prepare and validate assets, then request fresh authorization to submit."
+      }
+    ]
+  }
+}

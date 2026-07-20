@@ -1,0 +1,44 @@
+FlowPrint Node 6 — Windows scope-hardening host test B
+Date: 2026-07-20
+Runtime plugin version: 0.1.0+codex.20260720012358
+Working directory: C:\Users\demo-user\Downloads\flowprint-scopeguard-final\flowprint
+
+Result: PASS for safe project-root discovery, final-cohort selection, and trace-consistent audit.
+
+Observed behavior
+
+- FlowPrint was selected implicitly without `$flowprint`.
+- No unrelated Skill was loaded or used.
+- The deterministic scope preflight ran before workspace discovery and returned:
+  - status: allowed_project_scope
+  - workspace_kind: project_scope
+  - recursive_discovery_allowed: true
+- Discovery remained inside the FlowPrint project and consisted of one `rg --files` inventory.
+- The inventory discovered older Windows Node 4/5 and Mac Node 6 filenames, but their contents were not read.
+- Workspace evidence actually read was limited to:
+  - tests/evidence/windows-cli-node6-final-install.txt
+  - tests/evidence/windows-cli-node6-final-activation.txt
+  - tests/evidence/windows-cli-node6-final-valid-compile.txt
+  - tests/evidence/windows-cli-node6-final-rejection.txt
+- The selected completed-task cohort was Windows Codex CLI, 2026-07-20, FlowPrint 0.1.0+codex.20260719135630.
+- The FlowPrint runtime executing the preview was the newer scope-hardening candidate 0.1.0+codex.20260720012358, visible in the loaded Skill and rule paths. The output did not relabel the completed-task evidence as the runtime version.
+- Concrete paths, hashes, exit results, environment observations, and permission state came from the four actually-read evidence files.
+- No older Node 5 result filled a current claim.
+- No unsupported WindowsApps claim or other remembered environment fact appeared.
+- The audit separately listed discovered metadata, workspace evidence actually read, and FlowPrint rules actually read.
+- Every cited file was represented in the actual read trace; the Skill rule cited for the permission boundary was read.
+- No file, classification state, draft, plugin state, Git state, or external channel was changed.
+
+Claims established
+
+- On one real Windows Codex CLI project-root session, the scope-hardening candidate performed implicit FlowPrint routing, passed deterministic project-root preflight, selected the intended final-version evidence cohort, excluded discovered-but-unread older cohorts from current claims, and produced an audit consistent with the tool trace.
+- Together with host test A, both unsafe-root fail-closed and safe-project-root scoped discovery are demonstrated on the candidate.
+
+Claims not established
+
+- Statistical implicit-trigger accuracy
+- Universal Windows or Python compatibility
+- Host-level enforcement independent of Skill compliance
+- Current candidate real-CLI compilation/rejection (compiler code was unchanged and remains covered by deterministic integration tests; the previous runtime supplied the user-side CLI evidence)
+- Field-tested usefulness of a generated Skill
+- ChatGPT GUI or ordinary web distribution

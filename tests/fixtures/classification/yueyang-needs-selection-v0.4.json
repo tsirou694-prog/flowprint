@@ -1,0 +1,52 @@
+{
+  "schema_version": "0.4",
+  "workflow": {
+    "candidate_name": null,
+    "scope": {
+      "status": "needs_user_selection",
+      "candidates": [
+        {
+          "id": "trip-planning",
+          "name": "适老亲子家庭短途旅行规划",
+          "evidence": [
+            {
+              "source_type": "final_artifact",
+              "locator": "evidence cohort: accepted two-day itinerary"
+            }
+          ],
+          "rationale": "Produces an operational itinerary optimized for a mixed-age family group."
+        },
+        {
+          "id": "trip-poster",
+          "name": "家庭旅行邀请函与纪念海报制作",
+          "evidence": [
+            {
+              "source_type": "final_artifact",
+              "locator": "evidence cohort: accepted vertical invitation poster"
+            }
+          ],
+          "rationale": "Produces a visual family-group artifact with a distinct layout and visual QA contract."
+        }
+      ],
+      "selected_candidate_id": null,
+      "selection_confirmation": null
+    }
+  },
+  "source": {
+    "type": "current_task",
+    "raw_transcript_stored": false
+  },
+  "evidence_inventory": {
+    "goal": true,
+    "result": true,
+    "corrections": true,
+    "artifacts": true
+  },
+  "items": [],
+  "gates": {
+    "decision": "needs_workflow_selection",
+    "review_item_ids": [],
+    "questions": [],
+    "confirmations": []
+  }
+}

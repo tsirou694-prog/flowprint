@@ -1,0 +1,26 @@
+FlowPrint Node 5 language edge-case evidence
+Case: missing final decision after context summarization
+Date: 2026-07-17
+Environment: user's authenticated Windows Codex CLI
+Plugin version: 0.1.0+codex.20260717083300
+
+Input:
+- Red background and blue background remain as two candidates.
+- The user's final choice is missing and chronology cannot determine the winner.
+- Do not guess, generate, or compile.
+
+Observed correct behavior:
+- No color was selected as final.
+- The color remained a Run Parameter with evidence_state ambiguous.
+- Status was needs_review and the first question requested the final color.
+- A Failure Lesson warned that context compression can remove a final decision.
+- No color was promoted to Profile.
+
+Observed defect:
+- The current-session instruction "do not generate or compile" was promoted to a high-impact reusable Permission Boundary.
+- FlowPrint asked a second question to reconfirm that explicit denial.
+- This is unnecessary and risks polluting the reusable workflow. A current-session scope instruction should be obeyed directly, not treated as a reusable workflow candidate or re-confirmed.
+
+Assessment:
+- Primary missing-decision behavior passed in this sample.
+- Overall result is partial pass because of permission-boundary over-classification and an unnecessary confirmation question.

@@ -1,0 +1,165 @@
+{
+  "schema_version": "0.3",
+  "workflow": {
+    "candidate_name": "Laosan WeChat sticker production"
+  },
+  "source": {
+    "type": "current_task",
+    "raw_transcript_stored": false
+  },
+  "evidence_inventory": {
+    "goal": true,
+    "result": true,
+    "corrections": true,
+    "artifacts": true
+  },
+  "items": [
+    {
+      "id": "item-core-anatomy",
+      "statement": "Verify identity-defining anatomy against the active character profile.",
+      "layer": "core",
+      "evidence": [{
+        "source_type": "user_correction",
+        "locator": "conversation: final character correction",
+        "quote": "注意老三无尾或短尾的特征"
+      }],
+      "rule_hits": ["R4", "R5"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "The anatomy check generalizes while the concrete fact remains in Profile."
+    },
+    {
+      "id": "item-domain-export",
+      "statement": "Load current WeChat sticker export requirements before validation.",
+      "layer": "domain",
+      "evidence": [{
+        "source_type": "workspace_file",
+        "locator": "accepted sticker specification",
+        "quote": "按照表情包规则形成最终稿"
+      }],
+      "rule_hits": ["R2"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "The requirement is caused by the target platform."
+    },
+    {
+      "id": "item-profile-tail",
+      "statement": "Laosan has no visible tail or only a very short tail.",
+      "layer": "profile",
+      "evidence": [{
+        "source_type": "user_correction",
+        "locator": "conversation: character identity correction",
+        "quote": "注意老三无尾或短尾的特征"
+      }],
+      "rule_hits": ["R1", "R7"],
+      "evidence_state": "supported",
+      "impact": "high",
+      "review_required": true,
+      "rationale": "This is a stable identity fact for one named character."
+    },
+    {
+      "id": "item-param-count",
+      "statement": "Produce eight stickers in this run.",
+      "layer": "run_parameter",
+      "evidence": [{
+        "source_type": "user_instruction",
+        "locator": "conversation: second-set request",
+        "quote": "现在我们来做第二套（8个）"
+      }],
+      "rule_hits": ["R3", "R7"],
+      "evidence_state": "supported",
+      "impact": "low",
+      "review_required": false,
+      "rationale": "The count can change without changing the workflow."
+    },
+    {
+      "id": "item-failure-halo",
+      "statement": "Transparent exports can develop a visible white edge halo.",
+      "layer": "failure_lesson",
+      "evidence": [{
+        "source_type": "user_correction",
+        "locator": "conversation: edge-quality feedback",
+        "quote": "表情包均有外围线"
+      }],
+      "rule_hits": ["R5"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "The defect becomes a reusable transparent-edge validation lesson.",
+      "abstracted_rule": "Preview transparent exports on light and dark backgrounds before packaging."
+    },
+    {
+      "id": "item-failure-tail-scope",
+      "statement": "A named character's anatomy must not become a breed-wide rule.",
+      "layer": "failure_lesson",
+      "evidence": [{
+        "source_type": "user_correction",
+        "locator": "conversation: correction of over-generalized tail rule",
+        "quote": "不能泛化为所有柯基"
+      }],
+      "rule_hits": ["R1", "R5"],
+      "evidence_state": "supported",
+      "impact": "high",
+      "review_required": true,
+      "rationale": "This prevents a profile fact from contaminating reusable workflow logic.",
+      "abstracted_rule": "Keep named-entity identity facts in Profile and reference them through a generic identity check."
+    },
+    {
+      "id": "item-permission-submit",
+      "statement": "Preparing submission assets does not authorize publishing or submitting them.",
+      "layer": "permission_boundary",
+      "evidence": [{
+        "source_type": "user_instruction",
+        "locator": "conversation: submission-material request",
+        "quote": "只准备投稿物料，没有授权发布"
+      }],
+      "rule_hits": ["R8"],
+      "evidence_state": "supported",
+      "impact": "high",
+      "review_required": true,
+      "rationale": "Submission is an external account action requiring fresh authorization."
+    }
+  ],
+  "gates": {
+    "decision": "ready",
+    "review_item_ids": [
+      "item-profile-tail",
+      "item-failure-tail-scope",
+      "item-permission-submit"
+    ],
+    "questions": [
+      {
+        "id": "question-1",
+        "item_ids": ["item-profile-tail", "item-failure-tail-scope"],
+        "prompt": "Keep the tail fact only in the Laosan Profile and preserve the anti-generalization lesson?",
+        "recommended_answer": "Yes — keep the concrete fact out of Core and retain the generic scope rule."
+      },
+      {
+        "id": "question-2",
+        "item_ids": ["item-permission-submit"],
+        "prompt": "Require fresh authorization before actual submission or publishing?",
+        "recommended_answer": "Yes — generation and preparation do not authorize an external action."
+      }
+    ],
+    "confirmations": [
+      {
+        "id": "confirmation-1",
+        "question_id": "question-1",
+        "item_ids": ["item-profile-tail", "item-failure-tail-scope"],
+        "confirmed_by": "user",
+        "accepted": true,
+        "answer": "确认，只属于老三，并保留不可泛化的教训。"
+      },
+      {
+        "id": "confirmation-2",
+        "question_id": "question-2",
+        "item_ids": ["item-permission-submit"],
+        "confirmed_by": "user",
+        "accepted": true,
+        "answer": "确认，实际提交或发布前必须重新授权。"
+      }
+    ]
+  }
+}

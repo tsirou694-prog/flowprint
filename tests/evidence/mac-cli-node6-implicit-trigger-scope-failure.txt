@@ -1,0 +1,32 @@
+FlowPrint Node 6 — first macOS implicit-trigger scope regression
+Captured from user-controlled CLI: 2026-07-19
+
+Prompt intentionally omitted the explicit $flowprint invocation and asked to
+turn the completed Mac install and compiler tests into an Agent Skill preview.
+
+What passed:
+  - Codex automatically selected flowprint:flowprint.
+  - FlowPrint returned all six classification layers.
+  - It did not compile, install, submit, upload, or publish.
+
+What did not pass:
+  - The host also loaded superpowers:using-superpowers.
+  - The agent searched MEMORY.md.
+  - The agent searched global Codex plugin/config state.
+  - The agent searched the user's home/Library paths.
+  - The agent searched shell history to reconstruct task evidence.
+  - Current-session restrictions contributed to persisted Permission Boundary
+    candidates even though the FlowPrint contract says to obey but exclude them.
+
+Disposition:
+  Partial trigger success; evidence-scope and routing acceptance failed. The
+  classification content is not accepted as proof of a safe product experience.
+
+Remediation in source version 0.1.0+codex.20260719133822:
+  - Fix the allowed evidence roots to the visible conversation, current working
+    directory, and FlowPrint's own references/scripts.
+  - Explicitly ban Memory, shell history, global config/plugin inventory,
+    home-wide discovery, unrelated repositories, and unrelated Skills.
+  - Require conservative degradation when evidence is missing.
+  - Exclude current-session controls from persisted Permission Boundaries unless
+    durable evidence or an existing contract independently supports the item.

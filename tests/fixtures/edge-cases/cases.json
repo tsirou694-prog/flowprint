@@ -1,0 +1,55 @@
+{
+  "purpose": "Forward-test prompts for known language-understanding risks. These are test contracts, not evidence that a model passed them.",
+  "cases": [
+    {
+      "id": "negation-sarcasm",
+      "risk": "negation_and_sarcasm",
+      "context": "用户说：‘当然不要再把白边当成什么高级质感。成品必须没有白边。’",
+      "expected": [
+        "Do not extract preserving white halos as a positive rule.",
+        "Create a failure lesson that requires transparent-edge inspection."
+      ],
+      "forward_test_status": "pending"
+    },
+    {
+      "id": "later-correction-wins",
+      "risk": "later_correction_overrides_early_request",
+      "context": "早期要求：‘给老三画一条明显长尾。’ 最终修正：‘前面的长尾要求作废；老三无尾或短尾。’",
+      "expected": [
+        "Use the final correction as the current Profile candidate.",
+        "Do not keep the superseded long-tail instruction as an active rule."
+      ],
+      "forward_test_status": "passed_on_0.1.0+codex.20260717083300"
+    },
+    {
+      "id": "missing-final-decision",
+      "risk": "long_context_missing_final_decision",
+      "context": "上下文摘要只保留了两个互相冲突的背景色方案，没有保留用户最终选择。",
+      "expected": [
+        "Mark the decision ambiguous or conflicting.",
+        "Require review and do not compile."
+      ],
+      "forward_test_status": "partial_then_passed_regression_on_0.1.0+codex.20260717090647"
+    },
+    {
+      "id": "single-image-profile",
+      "risk": "single_image_promoted_to_profile",
+      "context": "只有一张参考图看起来像蓝色围巾；用户从未说蓝色围巾是角色长期设定。",
+      "expected": [
+        "Do not silently create a permanent Profile fact.",
+        "Mark a Profile candidate for review or keep it as a run parameter."
+      ],
+      "forward_test_status": "pending"
+    },
+    {
+      "id": "modality-strength",
+      "risk": "usually_prefer_must_strength_confusion",
+      "context": "品牌通常使用圆角；这次尽量使用暖色；Logo 安全区必须保留。",
+      "expected": [
+        "Preserve the different strengths of usually, prefer, and must.",
+        "Do not compile all three statements as identical hard rules."
+      ],
+      "forward_test_status": "passed_regression_on_0.1.0+codex.20260717090647"
+    }
+  ]
+}

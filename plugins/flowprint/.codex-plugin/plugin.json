@@ -1,0 +1,27 @@
+{
+  "name": "flowprint",
+  "version": "0.1.0+codex.20260720124856",
+  "description": "Segment completed AI work into explicit workflow candidates, compile one user-selected non-installed Agent Skill draft, and revise it through hash-bound confirmation without recording or exporting the conversation.",
+  "author": {
+    "name": "SIROU Tang"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "FlowPrint",
+    "shortDescription": "Select one reusable workflow and compile a guarded Skill draft.",
+    "longDescription": "FlowPrint starts after an AI task is complete, validates the project evidence root before searching, separates adjacent reusable workflows before six-layer classification, stops for explicit user selection when multiple candidates exist, compiles one dependency-tracked Skill draft, and routes later corrections through impact analysis, stale-state invalidation, fresh user confirmation, and non-overwriting recompilation.",
+    "developerName": "SIROU Tang",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Turn this completed task into a validated Skill draft.",
+      "Extract a reusable workflow from what we just finished.",
+      "Detect whether this completed task contains multiple reusable workflows and stop for my selection before compiling.",
+      "Start FlowPrint, validate the project scope, and inspect current task evidence.",
+      "Revise this FlowPrint draft from my correction without overwriting the previous version."
+    ]
+  }
+}

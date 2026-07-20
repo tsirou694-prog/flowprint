@@ -1,0 +1,26 @@
+FlowPrint Node 6 — first scope-fix implicit-trigger retest
+Captured from user-controlled CLI: 2026-07-19
+
+Improvements observed:
+  - Automatic FlowPrint selection still worked without $flowprint.
+  - No shell-history scan, global-config scan, home-wide search, or unrelated
+    plugin inventory was used to reconstruct task evidence.
+  - Missing concrete logs were not replaced by invented commands, paths, exit
+    codes, or error text.
+  - Current-session controls were obeyed but did not become durable Permission
+    Boundary candidates.
+
+Remaining failures:
+  - Before FlowPrint's body was loaded, the host searched MEMORY.md.
+  - The host loaded skill-creator.
+  - The host loaded superpowers:using-superpowers, brainstorming,
+    writing-skills, and test-driven-development.
+  - The final audit accurately disclosed the Memory search and extra Skills,
+    but disclosure does not satisfy the no-read/no-unrelated-Skill contract.
+
+Disposition:
+  Improved but still not accepted. Move the scope and exclusive-routing guard
+  from body-only instructions into the always-visible Skill frontmatter. If an
+  additional normal-environment retest still preloads superpowers, treat it as
+  a host/user-environment conflict and use an isolated demo environment instead
+  of repeatedly weakening or expanding FlowPrint.

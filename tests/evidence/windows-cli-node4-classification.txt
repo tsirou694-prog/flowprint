@@ -1,0 +1,46 @@
+FlowPrint Node 4 real Codex CLI evidence
+Date: 2026-07-17
+Environment: user's authenticated Windows Codex CLI
+
+Initial classification result:
+
+Candidate workflow: 老三柯基微信表情包制作与投稿物料准备
+Evidence: goal yes · result yes · corrections yes · artifacts no
+
+Core Workflow
+- 制作角色表情后，按当前角色档案检查身份特征，再进行动画节奏、透明边缘和平台导出规范验收。
+
+Domain Knowledge
+- 微信表情包成品须按适用的尺寸、透明背景及文件格式规范导出。
+
+Profile
+- 角色“老三”是无尾或短尾柯基，成品不得凭空出现明显长尾。
+- state: supported · impact: high · review_required: true
+
+Run Parameters
+- 本次制作数量为 8 张。
+- 本次交付范围是准备投稿物料。
+
+Failure Lessons
+- 动态素材交付前必须进行实际播放节奏验收。
+- 透明图导出后应在深浅底色上复检边缘。
+- 不得把单个角色的身体特征提升为整个品种的通用规则。
+
+Permission Boundaries
+- 可以整理投稿所需物料，但未经本次新的明确授权，不得实际提交、上传或发布。
+- state: supported · impact: high · review_required: true
+
+Status: needs_review
+
+Review questions:
+1. 是否确认“无尾或短尾”仅保存为“老三”的角色档案？
+2. 是否确认未来每次实际提交、上传或发布前，都必须重新取得明确授权？
+
+User response: 确认，确认
+
+Final result:
+- “无尾或短尾”仅属于“老三”的角色档案，不泛化为所有柯基。
+- 实际提交、上传或发布必须逐次获得明确授权；当前仅限准备投稿物料。
+- Status: ready
+- Next capability: Skill compiler (Node 5)
+- 未生成最终 Skill，未执行投稿或发布。

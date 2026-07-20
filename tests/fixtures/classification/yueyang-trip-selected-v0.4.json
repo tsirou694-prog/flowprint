@@ -1,0 +1,194 @@
+{
+  "schema_version": "0.4",
+  "workflow": {
+    "candidate_name": "适老亲子家庭短途旅行规划",
+    "scope": {
+      "status": "user_selected",
+      "candidates": [
+        {
+          "id": "trip-planning",
+          "name": "适老亲子家庭短途旅行规划",
+          "evidence": [
+            {
+              "source_type": "final_artifact",
+              "locator": "evidence cohort: accepted two-day itinerary"
+            }
+          ],
+          "rationale": "Produces an operational itinerary optimized for a mixed-age family group."
+        },
+        {
+          "id": "trip-poster",
+          "name": "家庭旅行邀请函与纪念海报制作",
+          "evidence": [
+            {
+              "source_type": "final_artifact",
+              "locator": "evidence cohort: accepted vertical invitation poster"
+            }
+          ],
+          "rationale": "Produces a visual artifact with a separate layout and visual QA contract."
+        }
+      ],
+      "selected_candidate_id": "trip-planning",
+      "selection_confirmation": {
+        "selected_candidate_id": "trip-planning",
+        "confirmed_by": "user",
+        "accepted": true,
+        "answer": "只生成适老亲子家庭短途旅行规划 Skill，排除邀请函和海报制作。"
+      }
+    },
+    "trigger": {
+      "summary": "Plan practical 1–3 day family self-drive trips for mixed-age groups, especially trips with elders and children.",
+      "when_to_use": [
+        "亲子游规划",
+        "家庭短途自驾",
+        "带老人和孩子安排行程"
+      ],
+      "do_not_use": [
+        "旅行邀请函、海报或其他视觉设计"
+      ]
+    }
+  },
+  "source": {
+    "type": "current_task",
+    "raw_transcript_stored": false
+  },
+  "evidence_inventory": {
+    "goal": true,
+    "result": true,
+    "corrections": true,
+    "artifacts": true
+  },
+  "items": [
+    {
+      "id": "item-core-brief",
+      "workflow_candidate_id": "trip-planning",
+      "statement": "Start by fixing the trip purpose, traveler composition, dates, transport, lodging, fixed commitments, pace, and non-negotiable constraints.",
+      "layer": "core",
+      "evidence": [
+        {
+          "source_type": "final_artifact",
+          "locator": "accepted itinerary: trip brief and fixed commitments"
+        }
+      ],
+      "rule_hits": ["R4"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "The briefing method remains useful after removing Yueyang-specific values."
+    },
+    {
+      "id": "item-core-energy-budget",
+      "workflow_candidate_id": "trip-planning",
+      "statement": "Build each day around meals, check-in, rest, and booked anchors, then fit optional activities into the remaining travel-time and energy budget.",
+      "layer": "core",
+      "evidence": [
+        {
+          "source_type": "user_correction",
+          "locator": "final itinerary: rest-first pacing for elders and children"
+        }
+      ],
+      "rule_hits": ["R4", "R7"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "The method generalizes without preserving a specific attraction or meal."
+    },
+    {
+      "id": "item-domain-dynamic-data",
+      "workflow_candidate_id": "trip-planning",
+      "statement": "Recheck weather, opening hours, ticket availability, travel time, and temporary restrictions before presenting them as current facts.",
+      "layer": "domain",
+      "evidence": [
+        {
+          "source_type": "final_artifact",
+          "locator": "accepted itinerary: weather-linked alternative and operating assumptions"
+        }
+      ],
+      "rule_hits": ["R2"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "Travel logistics are time-sensitive domain facts rather than stable user preferences."
+    },
+    {
+      "id": "item-param-yueyang-run",
+      "workflow_candidate_id": "trip-planning",
+      "statement": "This run used July 18–19, eleven travelers, self-driving from Changsha County, a booked Yueyang guesthouse, and selected local stops.",
+      "layer": "run_parameter",
+      "evidence": [
+        {
+          "source_type": "final_artifact",
+          "locator": "accepted itinerary: current trip values"
+        }
+      ],
+      "rule_hits": ["R3", "R7"],
+      "evidence_state": "supported",
+      "impact": "low",
+      "review_required": false,
+      "rationale": "Dates, people, lodging, route, and stops should be recollected on every run."
+    },
+    {
+      "id": "item-failure-attraction-count",
+      "workflow_candidate_id": "trip-planning",
+      "statement": "Do not maximize attraction count when it conflicts with the group's mobility, heat exposure, or rest needs.",
+      "layer": "failure_lesson",
+      "evidence": [
+        {
+          "source_type": "user_correction",
+          "locator": "final correction: omit a walking-heavy attraction"
+        }
+      ],
+      "rule_hits": ["R4", "R5"],
+      "evidence_state": "supported",
+      "impact": "medium",
+      "review_required": false,
+      "rationale": "The prevention rule generalizes while the omitted attraction remains run-specific.",
+      "abstracted_rule": "Optimize the itinerary for group comfort and purpose before attraction count."
+    },
+    {
+      "id": "item-permission-travel-actions",
+      "workflow_candidate_id": "trip-planning",
+      "statement": "Preparing an itinerary does not authorize booking, payment, cancellation, or sending the plan to other people; obtain fresh authorization for each external action.",
+      "layer": "permission_boundary",
+      "evidence": [
+        {
+          "source_type": "model_inference",
+          "locator": "selected workflow: external travel actions"
+        }
+      ],
+      "rule_hits": ["R8"],
+      "evidence_state": "supported",
+      "impact": "high",
+      "review_required": true,
+      "rationale": "These actions affect accounts, money, reservations, or other people and require current authorization."
+    }
+  ],
+  "gates": {
+    "decision": "ready",
+    "review_item_ids": [
+      "item-permission-travel-actions"
+    ],
+    "questions": [
+      {
+        "id": "question-1",
+        "item_ids": [
+          "item-permission-travel-actions"
+        ],
+        "prompt": "Keep booking, payment, cancellation, and messaging as separately authorized actions?",
+        "recommended_answer": "Yes — itinerary preparation does not authorize an external action."
+      }
+    ],
+    "confirmations": [
+      {
+        "id": "confirmation-1",
+        "question_id": "question-1",
+        "item_ids": [
+          "item-permission-travel-actions"
+        ],
+        "confirmed_by": "user",
+        "accepted": true,
+        "answer": "确认，每次预订、付款、取消或发送前都单独授权。"
+      }
+    ]
+  }
+}

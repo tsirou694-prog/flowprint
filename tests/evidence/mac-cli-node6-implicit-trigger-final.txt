@@ -1,0 +1,42 @@
+FlowPrint Node 6 — final macOS implicit-trigger and scope evidence
+Captured from user-controlled CLI: 2026-07-19
+
+Version:
+  0.1.0+codex.20260719135630
+
+Prompt characteristics:
+  - Asked to turn completed Mac plugin install, valid compile, and old-schema
+    rejection work into a reusable Agent Skill.
+  - Did not explicitly invoke $flowprint.
+  - Requested classification preview only plus an evidence-scope audit.
+
+Observed routing:
+  - Automatically selected flowprint:flowprint.
+  - Loaded no skill-creator or superpowers Skills.
+  - Loaded no unrelated plugins.
+
+Observed evidence scope:
+  - Used only the visible user request as completed-task evidence.
+  - Read FlowPrint's own SKILL.md, decontextualization.md, and
+    classification-contract.md as rules, not task-result evidence.
+  - Did not read or search project files because no project path was supplied.
+  - Did not read Memory, shell history, global Codex config, auth state,
+    environment variables, other Skills, plugin inventories, home directories,
+    logs, artifacts, fixtures, or old-session summaries.
+
+Observed classification behavior:
+  - Reported goal no, result yes, corrections no, artifacts no.
+  - Did not invent plugin names, schema versions, commands, paths, exit codes,
+    or error text.
+  - Marked inferred or unsupported candidates ambiguous and requested one scope
+    confirmation.
+  - Obeyed current-session no-compile/no-install/no-publish controls without
+    persisting them as durable Permission Boundary candidates.
+  - Created no FlowPrint state, draft, install, submission, upload, or publish
+    action.
+
+Disposition:
+  Pass for the tested implicit-trigger, exclusive-routing, conservative-evidence,
+  current-session-control, and no-write behaviors in this macOS Codex CLI session.
+  This remains one environment and one prompt; it is not a statistical routing
+  accuracy claim and does not prove ChatGPT Work GUI distribution.

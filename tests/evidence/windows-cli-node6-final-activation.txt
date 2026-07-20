@@ -1,0 +1,32 @@
+FlowPrint Node 6 — final Windows explicit activation evidence
+Captured from user-controlled Codex CLI: 2026-07-20
+
+Version:
+  0.1.0+codex.20260719135630
+
+Prompt:
+  $flowprint 检查 FlowPrint 是否已在当前 Windows Codex CLI 会话中激活。只返回 FlowPrint activation card；不要生成、编译、安装或修改任何 Skill。
+
+Observed reads:
+  - FlowPrint's own SKILL.md
+  - activation-related text inside FlowPrint's own installed bundle
+  - FlowPrint's own plugin.json
+
+Response:
+  FlowPrint activation card
+  Status   ACTIVE
+  Version  0.1.0+codex.20260719135630
+  Runtime  Windows Codex CLI
+  Skill    flowprint
+  Changes  None
+
+Observed routing and scope:
+  - FlowPrint loaded successfully from the final-version cache path.
+  - No unrelated Skill was loaded in the supplied trace.
+  - Reads stayed inside FlowPrint's own installed bundle.
+  - No project, Skill, plugin, or external state change occurred.
+
+Evidence boundary:
+  This proves one explicit activation-only request on the final Windows build.
+  It does not yet prove final-version compilation, rejection, implicit routing,
+  or statistical trigger reliability on Windows.

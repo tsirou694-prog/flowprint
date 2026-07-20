@@ -1,0 +1,30 @@
+FlowPrint Node 6 — final Windows archive and plugin update evidence
+Captured from user-controlled PowerShell: 2026-07-20
+
+Archive:
+  FlowPrint-Windows-Final-v0.1.0.zip
+
+User-side SHA-256:
+  FAFDEDD93484D9AE3E46021564786CA27F304C4C572F6F6D75FB0327A5AB590A
+
+Expected release SHA-256:
+  fafdedd93484d9ae3e46021564786ca27f304c4c572f6f6d75fb0327a5ab590a
+
+Source manifest version after extraction:
+  0.1.0+codex.20260719135630
+
+Codex install result:
+  Added plugin `flowprint` from marketplace `flowprint-dev`.
+  Installed plugin root:
+    <USER_HOME>\.codex\plugins\cache\flowprint-dev\flowprint\0.1.0+codex.20260719135630
+
+Environment observed before update:
+  Codex CLI 0.144.5
+  Logged in using ChatGPT
+  Prior FlowPrint version: 0.1.0+codex.20260717090647
+
+Evidence boundary:
+  This proves the final archive downloaded on the user's Windows machine matched
+  the release hash, the extracted source declared the final version, and Codex
+  installed that version into its plugin cache. It does not yet prove activation,
+  compilation, rejection, or implicit routing behavior on the final Windows build.

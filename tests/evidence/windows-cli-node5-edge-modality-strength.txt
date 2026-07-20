@@ -1,0 +1,25 @@
+FlowPrint Node 5 language edge-case evidence
+Case: usually / prefer / must strength distinction
+Date: 2026-07-17
+Environment: user's authenticated Windows Codex CLI
+Plugin version: 0.1.0+codex.20260717083300
+
+Input:
+- The brand usually uses rounded corners.
+- Prefer warm colors for this run.
+- The Logo safe area must be preserved.
+
+Observed correct behavior:
+- "Usually uses rounded corners" became a non-mandatory brand Profile candidate and required review.
+- "Prefer warm colors for this run" became a low-impact Run Parameter with optional strength preserved.
+- "Logo safe area must be preserved" became a Domain Knowledge requirement with mandatory strength preserved.
+- The three statements were not flattened into identical hard rules.
+
+Observed issues:
+- Evidence inventory reported result yes even though the prompt contained constraints but no accepted final artifact or validation result.
+- The host invoked an unrelated 1Password Skill before FlowPrint despite no secret-management request. It performed no key access, but this adds routing noise and is a distribution/demo-isolation risk outside the classification result itself.
+
+Assessment:
+- The primary modality-strength behavior passed in this sample.
+- The evidence inventory was over-optimistic, so the overall output is not treated as flawless.
+- Unrelated host Skill invocation must be tracked separately from FlowPrint's classification behavior.

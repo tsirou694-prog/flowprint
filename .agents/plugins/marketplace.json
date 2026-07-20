@@ -1,0 +1,20 @@
+{
+  "name": "flowprint-dev",
+  "interface": {
+    "displayName": "FlowPrint Development"
+  },
+  "plugins": [
+    {
+      "name": "flowprint",
+      "source": {
+        "source": "local",
+        "path": "./plugins/flowprint"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

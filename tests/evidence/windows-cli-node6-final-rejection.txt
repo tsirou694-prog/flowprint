@@ -1,0 +1,36 @@
+FlowPrint Node 6 — final Windows old-schema rejection evidence
+Captured from user-controlled Codex CLI: 2026-07-20
+
+Version:
+  0.1.0+codex.20260719135630
+
+Input:
+  tests/fixtures/classification/sticker-valid.json
+
+Requested output:
+  .flowprint/drafts/windows-final-should-not-exist
+
+Result:
+  classification_validator_exit: 0
+  compiler_exit: 1
+  rejection_gate: confirmation_schema
+  rejection_reason: Node 5 requires schema_version 0.3 and explicit user
+    confirmation records.
+  target_directory_exists: false
+  SKILL.md: not generated
+  flowprint-manifest.json: not generated
+  compile-record.json: not generated
+  install_performed: false
+  external_action_performed: false
+
+Input SHA-256 before and after:
+  6777DC9569467AA9313D4F0971029CAF092DAAC10B06BDDF8CD3B805F97A4674
+
+The pre-run trace also confirmed the target did not exist. The structurally valid
+schema 0.2 classification passed the standalone classification validator, then
+the real compiler's confirmation_schema gate rejected it.
+
+Evidence boundary:
+  This proves fail-closed behavior for this final-version Windows schema 0.2
+  sample, including no output residue and no input mutation. It does not prove
+  every malformed or adversarial input is rejected.

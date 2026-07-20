@@ -1,0 +1,31 @@
+FlowPrint Node 5 valid compile evidence
+Date: 2026-07-17
+Environment: user's authenticated Windows Codex CLI
+Plugin version: 0.1.0+codex.20260717083300
+
+Requested behavior:
+- Compile tests/fixtures/classification/sticker-ready-v0.3.json.
+- Output .flowprint/drafts/laosan-sticker-workflow.
+- Do not install, submit, upload, or publish.
+
+Observed environment issue:
+- Initial `python3` entry attempt returned exit 112: "No installed Python found!"
+- Codex discovered the existing interpreter at
+  C:\Users\demo-user\AppData\Local\Programs\Python\Python313\python.exe
+  and retried without installing software.
+
+Final observed result:
+- Classification validator exit code: 0
+- Compiler exit code: 0
+- Draft: .flowprint/drafts/laosan-sticker-workflow
+- SKILL.md exists: true
+- flowprint-manifest.json exists: true
+- compile-record.json exists: true
+- install_state: not_authorized
+- install_performed: false
+- external_actions_authorized: false
+- No install, submission, upload, or publication command was executed.
+
+Assessment:
+- Valid-input compile behavior passed in this tested environment.
+- The Python launcher mismatch is a recoverable Windows portability issue and must not be hidden.
