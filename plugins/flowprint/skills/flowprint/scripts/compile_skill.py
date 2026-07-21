@@ -134,9 +134,69 @@ def build_draft(
     }
     candidate = document["workflow"]["candidate_name"]
     description = generated_description(document)
-    core_lines = [f"{index}. {item['statement']}" for index, item in enumerate(items_by_layer["core"], start=1)]
+    core_lines = [
+        f"{index}. {item['statement']} (`{item['id']}`)"
+        for index, item in enumerate(items_by_layer["core"], start=1)
+    ]
     if not core_lines:
         core_lines = ["1. Load the references and ask for the current run parameters before proceeding."]
+
+    input_lines = [
+        f"- Use this workflow requirement to identify the information that must be known before execution: "
+        f"{item['statement']} (`{item['id']}`)"
+        for item in items_by_layer["core"][:1]
+    ]
+    if items_by_layer["run_parameter"]:
+        input_lines.extend(
+            f"- Confirm or replace these source-task values for the current run: {item['statement']} "
+            f"(`{item['id']}`)"
+            for item in items_by_layer["run_parameter"]
+        )
+    else:
+        input_lines.append(
+            "- No variable input was recorded. Ask only for information required to execute the workflow."
+        )
+    if items_by_layer["profile"]:
+        input_lines.append(
+            "- Confirm that the request targets the named entity in `profiles/default.json` before applying "
+            "its Profile facts; otherwise do not load or generalize them."
+        )
+
+    output_source_items = items_by_layer["core"] or items_by_layer["domain"]
+    output_requirement_lines = [
+        f"  - Make this requirement observable in the result: {item['statement']} (`{item['id']}`)"
+        for item in output_source_items
+    ]
+    output_lines = [
+        f"- Primary deliverable: a complete `{candidate}` result.",
+        "- Include an `Inputs and assumptions` section that records confirmed parameters, defaults, and "
+        "any explicit assumptions.",
+        "- Include a `Result` section that makes the selected workflow requirements observable:",
+        *output_requirement_lines,
+    ]
+    if items_by_layer["domain"]:
+        output_lines.append(
+            "- Include a `Verification` section that reports each recorded domain rule as passed, failed, "
+            "or not verified."
+        )
+    if items_by_layer["failure_lesson"]:
+        output_lines.append(
+            "- Include a `Quality checks` section that reports each failure-derived acceptance check as "
+            "passed or failed."
+        )
+
+    domain_check_lines = [
+        f"- Verify before delivery: {item['statement']} (`{item['id']}`)"
+        for item in items_by_layer["domain"]
+    ] or ["- No domain-specific rule was recorded."]
+    acceptance_check_lines = [
+        f"- Pass only if the result satisfies: {item['abstracted_rule']} (`{item['id']}`)"
+        for item in items_by_layer["failure_lesson"]
+    ] or ["- No failure-derived acceptance check was recorded."]
+    permission_lines = [
+        f"- {item['statement']} (`{item['id']}`)"
+        for item in items_by_layer["permission_boundary"]
+    ] or ["- No workflow-specific external action was recorded as authorized."]
 
     skill_md = f"""---
 name: {skill_name}
@@ -145,19 +205,45 @@ description: {json.dumps(description, ensure_ascii=False)}
 
 # {candidate}
 
+## Inputs to collect
+
+{chr(10).join(input_lines)}
+
+## If information is missing
+
+- Ask one compact batch of at most three questions only when the missing information would change the workflow, primary deliverable, safety, or permission boundary.
+- For non-blocking gaps, continue with a reasonable assumption and disclose it under `Inputs and assumptions`.
+- Verify time-sensitive facts required by the domain rules before presenting them as current. If verification is unavailable, label the value `not verified` instead of inventing certainty.
+
 ## Workflow
 
 {chr(10).join(core_lines)}
 
-## Load only what is needed
+## Output contract
 
-- Read `references/domain-knowledge.md` when platform or format constraints apply.
-- Read `profiles/default.json` before checking named-entity identity or stable preferences.
-- Read `references/run-parameters.md` to collect values that may change on this run.
-- Read `references/failure-lessons.md` before quality assurance or recovery.
-- Always read `references/permission-boundaries.md` before any external, account-specific, or irreversible action.
+{chr(10).join(output_lines)}
 
-## Safety boundary
+## Quality checks
+
+### Domain rules
+
+{chr(10).join(domain_check_lines)}
+
+### Must-pass acceptance checks
+
+{chr(10).join(acceptance_check_lines)}
+
+## Supporting files
+
+- Read `references/domain-knowledge.md` before applying domain rules.
+- Read `references/run-parameters.md` while collecting or reconfirming current inputs.
+- Read `references/failure-lessons.md` before final quality assurance or recovery.
+- Read `profiles/default.json` only after the named entity matches the request.
+- Read `references/permission-boundaries.md` before any external, account-specific, or irreversible action.
+
+## Permission boundary
+
+{chr(10).join(permission_lines)}
 
 Preparing a result does not authorize an external, account-specific, or irreversible action. Before any action listed in `references/permission-boundaries.md`, obtain fresh and explicit authorization for that action. If authorization is absent or ambiguous, stop after preparing a preview.
 """
@@ -217,8 +303,13 @@ Preparing a result does not authorize an external, account-specific, or irrevers
     write_text(stage / "agents" / "openai.yaml", openai_yaml)
 
     active_profile_ids = ["default"] if items_by_layer["profile"] else []
+    skill_item_ids = [
+        item["id"]
+        for layer in ("core", "domain", "run_parameter", "failure_lesson", "permission_boundary")
+        for item in items_by_layer[layer]
+    ]
     artifact_specs = [
-        ("SKILL.md", [item["id"] for item in items_by_layer["core"] + items_by_layer["permission_boundary"]], "skill", active_profile_ids),
+        ("SKILL.md", skill_item_ids, "skill", active_profile_ids),
         ("agents/openai.yaml", [item["id"] for item in items_by_layer["core"]], "ui_metadata", []),
         ("references/domain-knowledge.md", [item["id"] for item in items_by_layer["domain"]], "domain", []),
         ("references/run-parameters.md", [item["id"] for item in items_by_layer["run_parameter"]], "run_parameters", []),

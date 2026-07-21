@@ -72,17 +72,16 @@ Required output: public YouTube video, English narration or an included English 
 
 ### 2:38–2:55 — Codex, GPT-5.6, and close
 
-**Screen:** Briefly show test output: `Ran 63 tests — OK`, then architecture or repository tree.
+**Screen:** Briefly show test output: `Ran 66 structural/regression tests — OK`, with `not a generated-content quality score`, then architecture or repository tree.
 
 **English narration:**
 
-> Codex accelerated the entire build: plugin scaffolding, debugging, cross-platform tests, and mechanism changes from review feedback. GPT-5.6 performs language understanding; deterministic Python owns the gates. FlowPrint preserves successful AI work while keeping the user in control of what becomes reusable.
+> Codex accelerated the entire build: plugin scaffolding, debugging, cross-platform tests, and mechanism changes from review feedback. GPT-5.6 performs language understanding; deterministic Python owns the gates. The sixty-six tests cover structure and regressions, not generated-content quality. FlowPrint preserves successful AI work while keeping the user in control of what becomes reusable.
 
 ## Optional English subtitle closing card
 
 ```text
 FlowPrint
 From completed AI work to one reusable, guarded Agent Skill draft.
-63 automated tests · macOS + Windows Codex CLI · Held-out evaluation N=1
+66 structural/regression tests · macOS + Windows Codex CLI samples · Held-out evaluation N=1
 ```
-

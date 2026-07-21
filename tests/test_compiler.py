@@ -17,6 +17,7 @@ SKILL = ROOT / "plugins" / "flowprint" / "skills" / "flowprint"
 COMPILER = SKILL / "scripts" / "compile_skill.py"
 IMPACT = SKILL / "scripts" / "analyze_impact.py"
 VALIDATOR = SKILL / "scripts" / "validate_classification.py"
+DRAFT_VALIDATOR = SKILL / "scripts" / "validate_generated_skill.py"
 READY_FIXTURE = ROOT / "tests" / "fixtures" / "classification" / "sticker-ready-v0.3.json"
 FIXTURES = ROOT / "tests" / "fixtures" / "classification"
 
@@ -63,6 +64,16 @@ class CompilerIntegrationTests(unittest.TestCase):
             self.assertFalse(record["install_performed"])
             self.assertEqual(manifest["skill"]["install_state"], "not_authorized")
             self.assertFalse(manifest["permissions"]["installation_authorized"])
+            skill = (output / "SKILL.md").read_text(encoding="utf-8")
+            for heading in (
+                "## Inputs to collect",
+                "## If information is missing",
+                "## Workflow",
+                "## Output contract",
+                "## Quality checks",
+                "## Permission boundary",
+            ):
+                self.assertIn(heading, skill)
 
     def test_multi_workflow_routing_document_is_rejected_at_selection_gate(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -89,6 +100,11 @@ class CompilerIntegrationTests(unittest.TestCase):
             self.assertNotIn("Execute the validated", skill)
             self.assertNotIn("mobile-size readability", skill)
             self.assertNotIn("installation, submission", skill)
+            self.assertIn("`item-param-yueyang-run`", skill)
+            self.assertIn("`item-core-brief`", skill)
+            self.assertIn("`item-domain-dynamic-data`", skill)
+            self.assertIn("`item-failure-attraction-count`", skill)
+            self.assertIn("`item-permission-travel-actions`", skill)
             manifest = json.loads((output / "flowprint-manifest.json").read_text(encoding="utf-8"))
             record = json.loads((output / "compile-record.json").read_text(encoding="utf-8"))
             self.assertEqual(manifest["workflow_scope"]["selected_candidate_id"], "trip-planning")
@@ -107,6 +123,10 @@ class CompilerIntegrationTests(unittest.TestCase):
             skill = (output / "SKILL.md").read_text(encoding="utf-8")
             self.assertIn("family trip invitations", skill)
             self.assertNotIn("travel-time and energy budget", skill)
+            self.assertIn("`item-param-poster-copy`", skill)
+            self.assertIn("`item-core-poster-structure`", skill)
+            self.assertIn("`item-domain-mobile-legibility`", skill)
+            self.assertIn("`item-failure-long-guide`", skill)
 
     def test_v04_single_workflow_compiles_without_user_selection_record(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -122,6 +142,76 @@ class CompilerIntegrationTests(unittest.TestCase):
             self.assertEqual(record["workflow_selection"]["candidate_count"], 1)
             self.assertFalse(record["workflow_selection"]["user_selection_bound"])
             self.assertFalse(manifest["workflow_scope"]["selection_confirmation_bound"])
+            skill = (output / "SKILL.md").read_text(encoding="utf-8")
+            self.assertIn("`item-param-report-audience`", skill)
+            self.assertIn("`item-core-report-structure`", skill)
+
+    def test_same_classification_replays_to_byte_identical_skill(self):
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            document = fixture("yueyang-trip-selected-v0.4.json")
+            first, first_output, _ = self.run_compiler(document, workspace, "replay-one")
+            second, second_output, _ = self.run_compiler(document, workspace, "replay-two")
+            self.assertEqual(first.returncode, 0, first.stderr)
+            self.assertEqual(second.returncode, 0, second.stderr)
+            self.assertEqual(
+                (first_output / "SKILL.md").read_bytes(),
+                (second_output / "SKILL.md").read_bytes(),
+            )
+
+    def test_generated_validator_rejects_summary_only_skill(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result, output, _ = self.run_compiler(ready_document(), Path(directory), "thin-skill")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            skill_path = output / "SKILL.md"
+            skill = skill_path.read_text(encoding="utf-8")
+            start = skill.index("## Inputs to collect")
+            end = skill.index("## Permission boundary")
+            thin = skill[:start] + "## Workflow\n\n1. Summarize the workflow.\n\n" + skill[end:]
+            skill_path.write_text(thin, encoding="utf-8")
+            validation = subprocess.run(
+                [sys.executable, str(DRAFT_VALIDATOR), str(output), "--json"],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertNotEqual(validation.returncode, 0)
+            report = json.loads(validation.stdout)
+            self.assertTrue(any("Output contract" in error for error in report["errors"]))
+
+    def test_generated_validator_rejects_ungrounded_output_contract_with_item_id(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result, output, _ = self.run_compiler(ready_document(), Path(directory), "ungrounded-output")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            skill_path = output / "SKILL.md"
+            skill = skill_path.read_text(encoding="utf-8")
+            start = skill.index("## Output contract")
+            end = skill.index("## Quality checks")
+            manifest = json.loads((output / "flowprint-manifest.json").read_text(encoding="utf-8"))
+            core_id = next(
+                item["item_id"]
+                for item in manifest["dependency_graph"]["items"]
+                if item["layer"] == "core"
+            )
+            generic = (
+                "## Output contract\n\n"
+                "- Primary deliverable: a complete result.\n"
+                "- Include an `Inputs and assumptions` section.\n"
+                f"- Include a generic result field (`{core_id}`).\n\n"
+            )
+            skill_path.write_text(skill[:start] + generic + skill[end:], encoding="utf-8")
+            validation = subprocess.run(
+                [sys.executable, str(DRAFT_VALIDATOR), str(output), "--json"],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertNotEqual(validation.returncode, 0)
+            report = json.loads(validation.stdout)
+            self.assertTrue(
+                any("no requirement text" in error for error in report["errors"]),
+                report["errors"],
+            )
 
     def test_bad_confidence_field_is_rejected_by_real_compiler(self):
         document = ready_document()

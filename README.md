@@ -21,7 +21,7 @@ FlowPrint treats reuse as a small compilation problem rather than transcript sto
 2. **Discover workflow candidates.** GPT-5.6 in Codex identifies independently reusable purposes or outputs.
 3. **Stop for workflow selection.** If more than one candidate exists, FlowPrint emits `needs_workflow_selection` and does not create six-layer items.
 4. **Decontextualize the selected workflow.** Evidence is classified into Core Workflow, Domain Knowledge, Profile, Run Parameters, Failure Lessons, and Permission Boundaries.
-5. **Validate and compile.** Python validators reject unsupported schema states, forged confirmations, cross-workflow items, and premature compilation.
+5. **Validate and compile.** Python validators reject unsupported schema states, forged confirmations, cross-workflow items, premature compilation, and generated drafts that lack an executable input/output contract.
 6. **Revise without overwriting.** Later corrections create an impact plan, invalidate stale state, require fresh confirmation, and compile a separately versioned draft.
 
 ```mermaid
@@ -126,13 +126,16 @@ For the complete Windows PowerShell path, see [`WINDOWS-NODE8-WORKFLOW-SELECTION
 python3 -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
-Current repository result: **63 tests passed**.
+Current repository result: **66 tests passed**.
+
+These are structural and regression tests for the FlowPrint pipeline. They do not establish generated-content quality, statistical workflow-discovery accuracy, or field adoption.
 
 ## Current evidence
 
 - plugin installation, activation, positive compilation, and fail-closed rejection were exercised on real macOS and Windows Codex CLI environments across the tested versions;
 - one real Windows revision transaction demonstrated stale-state invalidation, confirmation binding, receipt-gated recompilation, and base-draft immutability;
 - the current automated suite covers workflow selection, excluded-workflow rejection, evidence scope, compilation, and revision transactions;
+- generated drafts now have a deterministic execution contract covering inputs, missing-information handling, workflow steps, output requirements, quality checks, and permission boundaries;
 - one held-out real sticker task was accepted after two user-guided correction cycles (`N=1`).
 
 The project is **not Field-tested**. The held-out result does not establish statistical classification accuracy, cross-character generalization, or independent-model evaluator agreement.

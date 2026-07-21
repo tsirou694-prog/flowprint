@@ -13,6 +13,14 @@ from typing import Any
 
 
 NAME = re.compile(r"^[a-z0-9][a-z0-9-]{0,62}[a-z0-9]$|^[a-z0-9]$")
+REQUIRED_SKILL_SECTIONS = (
+    "Inputs to collect",
+    "If information is missing",
+    "Workflow",
+    "Output contract",
+    "Quality checks",
+    "Permission boundary",
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -21,6 +29,35 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(65536), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def markdown_section(document: str, heading: str) -> str | None:
+    match = re.search(
+        rf"(?ms)^## {re.escape(heading)}\s*$\n(.*?)(?=^## |\Z)",
+        document,
+    )
+    return match.group(1).strip() if match else None
+
+
+def rendered_item_statement(section: str, item_id: str) -> str | None:
+    """Return the human-readable statement attached to an item ID in generated Markdown."""
+    marker = f"(`{item_id}`)"
+    for line in section.splitlines():
+        normalized = line.strip()
+        if marker not in normalized:
+            continue
+        normalized = re.sub(r"^(?:[-*]|\d+\.)\s+", "", normalized)
+        normalized = normalized.split(marker, 1)[0].strip()
+        for prefix in (
+            "Verify before delivery:",
+            "Pass only if the result satisfies:",
+            "Make this requirement observable in the result:",
+        ):
+            if normalized.startswith(prefix):
+                normalized = normalized[len(prefix):].strip()
+        if normalized:
+            return normalized
+    return None
 
 
 def validate_draft(root: Path) -> list[str]:
@@ -50,6 +87,12 @@ def validate_draft(root: Path) -> list[str]:
             errors.append("SKILL.md: invalid skill name")
         if len(match.group(2).strip()) < 40:
             errors.append("SKILL.md: description is too short to explain use and trigger")
+    sections = {heading: markdown_section(skill, heading) for heading in REQUIRED_SKILL_SECTIONS}
+    for heading, body in sections.items():
+        if body is None:
+            errors.append(f"SKILL.md: missing required section {heading!r}")
+        elif len(body) < 20:
+            errors.append(f"SKILL.md: required section {heading!r} is too thin to execute")
 
     try:
         manifest: dict[str, Any] = json.loads((root / "flowprint-manifest.json").read_text(encoding="utf-8"))
@@ -89,6 +132,14 @@ def validate_draft(root: Path) -> list[str]:
         return errors
     items = graph.get("items", [])
     known_items = {item.get("item_id") for item in items if isinstance(item, dict)}
+    items_by_layer: dict[str, set[str]] = {}
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        layer = item.get("layer")
+        item_id = item.get("item_id")
+        if isinstance(layer, str) and isinstance(item_id, str):
+            items_by_layer.setdefault(layer, set()).add(item_id)
     profiles = graph.get("profiles", [])
     known_profiles = {profile.get("profile_id") for profile in profiles if isinstance(profile, dict)}
     profile_versions = {
@@ -104,6 +155,7 @@ def validate_draft(root: Path) -> list[str]:
         errors.append(f"profiles/default.json: invalid JSON: {error}")
     artifacts = graph.get("artifacts", [])
     known_artifacts: set[str] = set()
+    skill_dependencies: set[str] = set()
     for index, artifact in enumerate(artifacts):
         path = f"dependency_graph.artifacts[{index}]"
         if not isinstance(artifact, dict):
@@ -114,6 +166,8 @@ def validate_draft(root: Path) -> list[str]:
             errors.append(f"{path}.path: non-empty string required")
             continue
         known_artifacts.add(relative)
+        if relative == "SKILL.md":
+            skill_dependencies = set(artifact.get("depends_on_item_ids", []))
         file_path = root / relative
         if not file_path.is_file():
             errors.append(f"{path}: referenced artifact does not exist: {relative}")
@@ -125,6 +179,73 @@ def validate_draft(root: Path) -> list[str]:
         unknown_profiles = set(artifact.get("depends_on_profile_ids", [])) - known_profiles
         if unknown_profiles:
             errors.append(f"{path}: unknown profile dependencies {sorted(unknown_profiles)}")
+
+    expected_skill_dependencies = set().union(
+        *(items_by_layer.get(layer, set()) for layer in (
+            "core",
+            "domain",
+            "run_parameter",
+            "failure_lesson",
+            "permission_boundary",
+        ))
+    )
+    missing_skill_dependencies = expected_skill_dependencies - skill_dependencies
+    if missing_skill_dependencies:
+        errors.append(
+            "SKILL.md: dependency graph omits generated content items "
+            f"{sorted(missing_skill_dependencies)}"
+        )
+
+    inputs = sections.get("Inputs to collect") or ""
+    missing_inputs = items_by_layer.get("run_parameter", set()) - {
+        item_id for item_id in items_by_layer.get("run_parameter", set()) if f"`{item_id}`" in inputs
+    }
+    if missing_inputs:
+        errors.append(f"SKILL.md: Inputs to collect omits Run Parameters {sorted(missing_inputs)}")
+    core_inputs = items_by_layer.get("core", set())
+    if core_inputs and not any(f"`{item_id}`" in inputs for item_id in core_inputs):
+        errors.append("SKILL.md: Inputs to collect is not grounded in a Core workflow item")
+
+    output_contract = sections.get("Output contract") or ""
+    if "Primary deliverable:" not in output_contract or "Inputs and assumptions" not in output_contract:
+        errors.append("SKILL.md: Output contract must define the primary deliverable and inputs/assumptions")
+    output_sources = items_by_layer.get("core", set()) | items_by_layer.get("domain", set())
+    if output_sources and not any(f"`{item_id}`" in output_contract for item_id in output_sources):
+        errors.append("SKILL.md: Output contract is not derived from any Core or Domain item")
+    workflow = sections.get("Workflow") or ""
+    source_statements = [
+        rendered_item_statement(workflow, item_id)
+        for item_id in items_by_layer.get("core", set())
+    ] + [
+        rendered_item_statement(sections.get("Quality checks") or "", item_id)
+        for item_id in items_by_layer.get("domain", set())
+    ]
+    source_statements = [statement for statement in source_statements if statement]
+    if output_sources and not any(statement in output_contract for statement in source_statements):
+        errors.append(
+            "SKILL.md: Output contract contains no requirement text rendered from a Core or Domain item"
+        )
+
+    quality_checks = sections.get("Quality checks") or ""
+    if "### Domain rules" not in quality_checks or "### Must-pass acceptance checks" not in quality_checks:
+        errors.append("SKILL.md: Quality checks must separate domain rules from acceptance checks")
+    for layer in ("domain", "failure_lesson"):
+        missing = {
+            item_id for item_id in items_by_layer.get(layer, set()) if f"`{item_id}`" not in quality_checks
+        }
+        if missing:
+            errors.append(f"SKILL.md: Quality checks omits {layer} items {sorted(missing)}")
+
+    permission_boundary = sections.get("Permission boundary") or ""
+    missing_permissions = {
+        item_id
+        for item_id in items_by_layer.get("permission_boundary", set())
+        if f"`{item_id}`" not in permission_boundary
+    }
+    if missing_permissions:
+        errors.append(
+            f"SKILL.md: Permission boundary omits permission items {sorted(missing_permissions)}"
+        )
     for index, edge in enumerate(graph.get("edges", [])):
         if edge.get("from_item_id") not in known_items:
             errors.append(f"dependency_graph.edges[{index}]: unknown from_item_id")
