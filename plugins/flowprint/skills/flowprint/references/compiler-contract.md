@@ -37,6 +37,29 @@ Generated structure:
 `flowprint-manifest.json` records classification item fingerprints, Profile version, item-to-artifact edges, artifact hashes, validation requirements, and separate draft/install/external-action permission states.
 For schema `0.4`, it also records candidate IDs, the selected workflow ID, selection status, selection binding state, and a workflow-definition fingerprint used by revision impact analysis.
 
+## Generated Skill execution contract
+
+Every generated `SKILL.md` must contain these executable sections:
+
+1. `Inputs to collect`
+2. `If information is missing`
+3. `Workflow`
+4. `Output contract`
+5. `Quality checks`
+6. `Permission boundary`
+
+`Quality checks` must keep two distinct subsections: `Domain rules` for domain constraints that may require judgment or current verification, and `Must-pass acceptance checks` for failure-derived yes/no acceptance criteria.
+
+The compiler currently derives this contract deterministically from confirmed schema `0.3` or `0.4` items; it does not add a new classification layer or invent a user-confirmed output schema. At minimum:
+
+- `Inputs to collect` cites a Core item and every Run Parameter item;
+- `Output contract` cites at least one current Core or Domain item and turns those statements into observable result requirements;
+- `Quality checks` cites every Domain and Failure Lesson item;
+- `Permission boundary` cites every Permission Boundary item;
+- the manifest records every item used by `SKILL.md` as a dependency.
+
+`validate_generated_skill.py` rejects a draft when one of these sections is absent or too thin, when the output contract is only ungrounded template text, or when required item references and dependency edges are missing. This is a deterministic content-structure gate, not evidence that the generated workflow is useful in real use.
+
 ## Permission states
 
 - `compile_state: draft` means files were generated.
@@ -116,6 +139,6 @@ Never infer `confirmed_by: user`, silently upgrade an old classification, reuse 
 
 ## Validation claims
 
-`validate_generated_skill.py` is a FlowPrint structural preflight, not official marketplace certification. During development, also run the available official Skill structure validator. Do not describe either check as proof that the workflow is useful or generally reliable.
+`validate_generated_skill.py` is a FlowPrint structural and generated-contract preflight, not official marketplace certification. During development, also run the available official Skill structure validator. Do not describe either check as proof that the workflow is useful or generally reliable.
 
 Workflow candidate detection still relies on model language understanding. The deterministic gate prevents a declared multi-workflow result from compiling silently; it cannot prove that the model enumerated every workflow present in the evidence. Keep this residual risk explicit in evaluation reports.

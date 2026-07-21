@@ -47,7 +47,7 @@ Split composition:
 - Create a clean demo project directory.
 - Increase terminal font size.
 - Hide email, username, full Home path, auth status details, and unrelated Downloads files.
-- Pre-run long tests; during recording, show the final concise `63 tests — OK` output.
+- Pre-run long tests; during recording, show the final concise `66 structural/regression tests — OK` output and keep the content-quality limitation visible.
 - Disable notifications.
 - Use one exact plugin version throughout the recording.
 - Prepare an English narration track or English subtitles.
@@ -59,4 +59,3 @@ Split composition:
 - six classification layers use six restrained colors;
 - selection state uses amber, accepted state uses green, blocked state uses red;
 - avoid dense architecture slides—the terminal and generated artifacts should remain the main evidence.
-

@@ -9,7 +9,7 @@ Evidence to show:
 - Codex plugin structure with a packaged Agent Skill and local marketplace.
 - GPT-5.6-driven workflow discovery and decontextualization.
 - Deterministic Python validators, compiler, scope guard, dependency analysis, and revision receipts.
-- 63 passing unit and integration tests.
+- 66 passing structural and regression tests for the pipeline; these do not establish generated-content quality.
 - Real positive and fail-closed CLI traces on macOS and Windows.
 - `/feedback` Session ID from the primary build thread.
 
@@ -64,7 +64,7 @@ Novel elements to emphasize:
 
 ### Safe claims
 
-- “FlowPrint passed 63 automated tests in the current repository.”
+- “FlowPrint passed 66 structural and regression tests in the current repository; these tests do not establish generated-content quality.”
 - “The unresolved multi-workflow fixture is rejected at the `workflow_selection` compiler gate.”
 - “The tested Windows revision transaction preserved the base draft and required a matching receipt.”
 - “One held-out real task was accepted after two user-guided correction cycles.”
@@ -78,4 +78,3 @@ Novel elements to emphasize:
 - “The security model prevents a malicious local process from tampering with records.”
 - “The local plugin works in ordinary ChatGPT web.”
 - “All Node 8 behavior has been statistically validated across ChatGPT desktop and CLI.”
-

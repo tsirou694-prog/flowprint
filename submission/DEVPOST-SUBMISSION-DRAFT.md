@@ -71,7 +71,7 @@ Each failure changed the mechanism: evidence-state gates replaced confidence, a 
 
 ## Accomplishments
 
-- 63 automated tests currently pass.
+- 66 structural and regression tests currently pass; they verify the pipeline and deterministic gates, not generated-content quality.
 - Valid and invalid compiler paths fail closed without installing a Skill.
 - The tested revision transaction preserves the base draft and rejects missing or altered receipts.
 - The workflow-selection gate rejects unresolved multi-workflow inputs without creating an output directory.

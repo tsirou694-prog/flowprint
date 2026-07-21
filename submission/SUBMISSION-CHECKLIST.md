@@ -79,7 +79,7 @@ validated end-to-end on every surface
 Use bounded alternatives:
 
 ```text
-passed 63 automated tests
+passed 66 structural and regression tests; this does not establish generated-content quality
 validated on the documented samples
 tested on one held-out real task
 accepted after two user-guided correction cycles

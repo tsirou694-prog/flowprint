@@ -1,6 +1,6 @@
 {
   "name": "flowprint",
-  "version": "0.1.0+codex.20260720124856",
+  "version": "0.1.0+codex.20260721013104",
   "description": "Segment completed AI work into explicit workflow candidates, compile one user-selected non-installed Agent Skill draft, and revise it through hash-bound confirmation without recording or exporting the conversation.",
   "author": {
     "name": "SIROU Tang"
