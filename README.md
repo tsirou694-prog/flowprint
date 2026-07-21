@@ -163,7 +163,7 @@ submission/                 Build Week submission materials
 | macOS Codex CLI | Tested on the documented samples |
 | Windows Codex CLI | Tested on the documented samples |
 | ChatGPT desktop Work mode | Latest plugin activation and broad-root scope blocking observed on macOS; full Node 8 host demo should be recorded separately |
-| ChatGPT web | Local marketplace installation is not supported |
+| ChatGPT web Work mode | Plugins are supported, but a local marketplace checkout is not mounted automatically; use workspace sharing during testing or an approved public Plugin Directory listing |
 
 ## Limitations
 
@@ -176,3 +176,9 @@ submission/                 Build Week submission materials
 ## License
 
 FlowPrint is released under the [MIT License](LICENSE). Copyright © 2026 SIROU Tang.
+
+## Policies and support
+
+- [Privacy policy](PRIVACY.md)
+- [Terms of use](TERMS.md)
+- [Support](SUPPORT.md)
